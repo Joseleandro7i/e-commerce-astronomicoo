@@ -19,7 +19,9 @@ module.exports = {
         'dark-gray-with-hint-blue': '#4b38387a',
         'dark-grayish-blue': '#3a3a426b',
         'charcoal-gray': '#2b2a314d',
-        'rich-black': 'rgb(11 20 27)'
+        'rich-black': 'rgb(11 20 27)',
+        'outer-space-gray': '#434b55',
+        'dark-unmetal': '#22282f'
       }
     }
   },
