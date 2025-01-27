@@ -45,12 +45,12 @@ export default function Main(): React.JSX.Element {
                 currentElement.removeEventListener('click', handleClick);
             };
         }
-    }, [contenerAnswer]); 
+    }, [contenerAnswer]);
 
     const toogleVisibleQuestion = () => {
         setIsVisibleAnswer(prevState => !prevState);
     }
-    
+
     const questions = {
         question1: {
             title: "What is Stellar?",
@@ -117,28 +117,21 @@ export default function Main(): React.JSX.Element {
                 </div>
             </section>
 
-            <section className="p-4 mt-6">
+            <section className="p-4 mt-6 flex flex-col">
 
-                {/* <h1 className="text-4xl font-semibold mb-4">Benefits of Stellar</h1> */}
-                {/* <Separator orientation='horizontal' /> */}
-
-                <div className="mt-4 ml-4 flex flex-wrap justify-start">
-                
-                <Benefits /> 
-
-                </div>
+                <Benefits />
 
             </section>
 
             <section className="mb-4">
-                <Prices /> 
+                <Prices />
             </section>
 
             <section className="p-4 mt-2 mb-4">
-                <div className="flex flex-col justify-center items-center w-auto mb-3 sd:mb-1 h-[150px] " >
-                    <div className=" w-10/12 sd:w-96">
-                    <h1 className="text-3xl  sd:text-4xl font-semibold mb-4">Frequently Asked Questions</h1>
-                    <Separator orientation="horizontal" widthOfSeparator="w-full" />
+                <div className="flex flex-col justify-center items-start w-auto mb-3 sd:mb-1 h-[150px] " >
+                    <div className=" w-1/3 sd:w-96">
+                        <h1 className="text-3xl  sd:text-4xl font-semibold mb-4">Frequently Asked Questions</h1>
+                        <Separator orientation="horizontal" widthOfSeparator="w-full" />
                     </div>
 
                     <p className="mt-4 w-4/5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum doloremque inventore molestias delectus quaerat </p>
@@ -147,29 +140,29 @@ export default function Main(): React.JSX.Element {
                 <div className="w-[95%] ml-4 mt-6">
                     {
                         Object.values(questions).map(({ title, answer }, index) => (
-                            <div key={index}  role="button" tabindex="0"
-                            onClick={toogleVisibleQuestion} className="flex flex-col mt-5 w-full h-full cursor-pointer items-center rounded-3xl py-2 px-3 mb-5 bg-dark-slate-gray"
-                            ref={contenerAnswer} >
-                                    <div className="flex items-center justify-between w-11/12" >
+                            <div key={index} role="button" tabindex="0"
+                                onClick={toogleVisibleQuestion} className="flex flex-col mt-5 w-full h-full cursor-pointer items-start rounded-3xl py-2 px-3 mb-5 bg-dark-slate-gray"
+                                ref={contenerAnswer} >
+                                <div className="flex items-center justify-between w-11/12" >
 
                                     <div className="flex">
                                         <h1 className='flex items-center'> {index} </h1>
-                                        
-                                        <div className="w-70"> 
-                                        <h2 className="text-1xl sd:text-2xl mb-3 ml-8"> {title} </h2>
-                                            
-                                        <Separator orientation='horizontal' widthOfSeparator="w-full" margin="ml-4"/>
+
+                                        <div className="w-70">
+                                            <h2 className="text-1xl md:text-[19px] mb-3 ml-8"> {title} </h2>
+
+                                            <Separator orientation='horizontal' widthOfSeparator="w-full" margin="ml-4" />
                                         </div>
                                     </div>
-                                    
-                                    <h1 className="text-2xl" >+</h1> 
-                                    </div>
-                                    
-                                    {isVisibleAnswer && (
-                                        <p className={`ml-6 py-3 mb-4 px-2 text-l`}>
-                                            {answer}
-                                        </p>
-                                    )}
+
+                                    <h1 className="text-2xl" >+</h1>
+                                </div>
+
+                                {isVisibleAnswer && (
+                                    <p className={`ml-6 py-3 mb-4 px-2 text-l`}>
+                                        {answer}
+                                    </p>
+                                )}
                             </div>
                         ))
                     }
