@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Separator from '../ui/separator';
+import Benefits from './sub-componets-main/benefits';
+import Prices from './prices';
 
 // Component for Section Titles
 const SectionTitle = ({ children, itIsPowerStellar }) => {
     console.log(children); // Log children before returning JSX
 
     return (
-        <h1 className={`${itIsPowerStellar ? 'text-5xl' : 'text-6xl'} font-medium ml-2 mt-2`}>
+        <h1 className={`${itIsPowerStellar ? 'text-3xl sm:text-5xl' : 'text-4xl sm:text-6xl'} font-medium ml-2 mt-8 sd:mt-2`}>
             {children}
         </h1>
     );
@@ -15,34 +17,40 @@ const SectionTitle = ({ children, itIsPowerStellar }) => {
 
 // Component for Paragraphs
 const SectionParagraph = ({ children }) => (
-    <p className="ml-3 mt-2">{children}</p>
-);
-
-// Benefits List Component
-const BenefitsList = () => (
-    <div className="mt-4 ml-4 bg-dark-green scrollbar-hide overflow-x-auto w-1/2 h-52 scroll-snap-x-mandatory">
-        {[
-            "Fast and Efficient Transactions",
-            "Easy to Find What You Want",
-            "Sell Anything You Like",
-            "Guaranteed by Stellar",
-            "Safe and Secure for Everyone",
-        ].map((benefit, index) => (
-            <>
-                <div key={index} className="mb-2 py-9 ml-20 flex-none mr-[1.2em] mt-1 scroll-snap-start w-[90%] h-auto text-lg">
-                    <h1 className="bg-slate-600 text-lg w-2/5 px-2">{benefit}</h1>
-                    <p className="w-auto mt-1">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Voluptatum excepturi sint libero non in ipsum iure laboriosam minus
-                        recusandae odit?</p>
-                </div>
-            </>
-        ))}
-    </div>
+    <p className="ml-3 mt-4 sm:mt-4">{children}</p>
 );
 
 // Main Component
 export default function Main(): React.JSX.Element {
+    const [isVisibleAnswer, setIsVisibleAnswer] = useState(false)
+    const contenerAnswer = useRef<HTMLDivElement | null>(null);
 
+    console.log("Ref value:", contenerAnswer.current);
+
+
+    useEffect(() => {
+        const currentElement = contenerAnswer.current;
+        if (currentElement != null) {
+            console.log(currentElement)
+            const handleClick = (event: MouseEvent): void => {
+                event.stopPropagation(); // Prevents other handlers from being called
+                setIsVisibleAnswer(true);
+                console.log("Clicked");
+            };
+
+            currentElement.addEventListener('click', handleClick);
+
+            // Cleanup function to remove the event listener
+            return () => {
+                currentElement.removeEventListener('click', handleClick);
+            };
+        }
+    }, [contenerAnswer]); 
+
+    const toogleVisibleQuestion = () => {
+        setIsVisibleAnswer(prevState => !prevState);
+    }
+    
     const questions = {
         question1: {
             title: "What is Stellar?",
@@ -75,19 +83,23 @@ export default function Main(): React.JSX.Element {
     return (
         <>
             <section className="flex justify-center mt-1 w-full">
-                <div className="flex justify-around p-6 rounded-3xl w-[98.5%] bg-dark-yellow">
+                <div className="flex justify-around flex-col items-center p-6 rounded-3xl w-[98.5%] bg-dark-yellow 
+                                md:flex-row md:items-start ">
 
-                    <div className="w-2/5 flex flex-col">
+                    <div className="w-11/12 flex flex-col
+                                    sm:w-auto 
+                                    lg:w-5/12">
                         <SectionTitle itIsPowerStellar={false}>Discover Stellar: Connecting You to a World of Opportunities</SectionTitle>
                         <SectionParagraph>
                             Stellar is your gateway to a global marketplace, designed for everyone—from ambitious entrepreneurs to individuals looking to declutter and sell second-hand items.
                         </SectionParagraph>
                     </div>
 
-                    <div className="w-2/5 flex flex-col h-auto justify-evenly">
+                    <div className="w-11/12 flex flex-col h-auto justify-evenly
+                                    sm:w-auto lg:w-5/12 lg:mt-7">
                         <div className="flex flex-col justify-around">
                             <SectionTitle itIsPowerStellar={true}>Experience the Power of Stellar</SectionTitle>
-                            <Separator sizeInWidth='w-auto' />
+                            <Separator orientation='horizontal' />
 
                             <div className="flex justify-between">
                                 <SectionParagraph>
@@ -99,42 +111,67 @@ export default function Main(): React.JSX.Element {
                             </div>
                         </div>
 
-                        <button className="text-4xl bg-slate-200 text-black rounded-sm py-2">Get Start to Sell Or Buy</button>
+                        <button className="text-2xl mt-8 bg-slate-200 text-black rounded-sm py-2
+                                           lg:text-4xl">Get Start to Sell Or Buy</button>
                     </div>
                 </div>
             </section>
 
-            <section className="p-4">
+            <section className="p-4 mt-6">
 
-                <h1 className="text-4xl font-semibold mb-4">Benefits of Stellar</h1>
-                <Separator sizeInWidth='w-2/6' />
+                {/* <h1 className="text-4xl font-semibold mb-4">Benefits of Stellar</h1> */}
+                {/* <Separator orientation='horizontal' /> */}
 
+                <div className="mt-4 ml-4 flex flex-wrap justify-start">
+                
+                <Benefits /> 
 
-                <BenefitsList />
+                </div>
 
-
-                {/* <img src='file:///C:/Users/leand/Downloads/juicy-boy-with-laptop-installing-security-passwords-shield-and-lock-on-his-pc-and-phone.png'/> */}
             </section>
 
-            <section className="p-4">
-                <h1 className="text-4xl font-semibold mb-4">Frequently Asked Questions</h1>
-                <Separator sizeInWidth='w-2/6' />
-                <div className="ml-4 mt-6">
+            <section className="mb-4">
+                <Prices /> 
+            </section>
+
+            <section className="p-4 mt-2 mb-4">
+                <div className="flex flex-col justify-center items-center w-auto mb-3 sd:mb-1 h-[150px] " >
+                    <div className=" w-10/12 sd:w-96">
+                    <h1 className="text-3xl  sd:text-4xl font-semibold mb-4">Frequently Asked Questions</h1>
+                    <Separator orientation="horizontal" widthOfSeparator="w-full" />
+                    </div>
+
+                    <p className="mt-4 w-4/5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum doloremque inventore molestias delectus quaerat </p>
+                </div>
+
+                <div className="w-[95%] ml-4 mt-6">
                     {
-                        Object.values(questions).map(({title, answer}, index) => (
-                            <div key={index} className="flex justify-around mt-5">
-                                <div className="w-3/5 flex flex-col">
-                                    <h2 className="text-2xl">
-                                        {title}
-                                    </h2>
-                                    <Separator sizeInWidth='w-auto' />
-                                </div>
-        
-                                <div className="w-2/3 py-3 px-2 my-3">
-                                    <p className="ml-6 py-3 px-2 text-lg bg-dark-gray">{answer}</p>
-                                </div>
+                        Object.values(questions).map(({ title, answer }, index) => (
+                            <div key={index}  role="button" tabindex="0"
+                            onClick={toogleVisibleQuestion} className="flex flex-col mt-5 w-full h-full cursor-pointer items-center rounded-3xl py-2 px-3 mb-5 bg-dark-slate-gray"
+                            ref={contenerAnswer} >
+                                    <div className="flex items-center justify-between w-11/12" >
+
+                                    <div className="flex">
+                                        <h1 className='flex items-center'> {index} </h1>
+                                        
+                                        <div className="w-70"> 
+                                        <h2 className="text-1xl sd:text-2xl mb-3 ml-8"> {title} </h2>
+                                            
+                                        <Separator orientation='horizontal' widthOfSeparator="w-full" margin="ml-4"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <h1 className="text-2xl" >+</h1> 
+                                    </div>
+                                    
+                                    {isVisibleAnswer && (
+                                        <p className={`ml-6 py-3 mb-4 px-2 text-l`}>
+                                            {answer}
+                                        </p>
+                                    )}
                             </div>
-                            ))
+                        ))
                     }
                 </div>
             </section>
