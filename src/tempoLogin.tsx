@@ -11,7 +11,7 @@ export async function permaneciaLogin () {
         'postgres://default:DEsoX6JqN1AM@ep-green-silence-a4qtd6to-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15'
       )
       const query =
-        await sql`SELECT usuarioEstaCadastrado FROM usuarios WHERE usuarioEstaCadastrado IS NOT NULL`
+      await sql`SELECT "usuarioEstaCadastrado" FROM usuarios WHERE "usuarioEstaCadastrado" IS NOT NULL`;
 
       query.forEach((objeto) => {
         const queryUsuarioEstaCadastrado = objeto.usuarioEstaCadastrado
