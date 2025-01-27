@@ -89,17 +89,6 @@ function Header ({
     const width = window.innerWidth;
     console.log(width)
 
-    
-    // if(width < 768) {
-    //   const currentMenuImg = menuImg.current;
-    //   console.log("Updated ref:", currentMenuImg);
-
-    //   if(visibilityMenuImg) {
-    //     setVisibilityMenuImg(true)
-    //   }
-
-    // }
-
   })
   
 
@@ -122,15 +111,15 @@ function Header ({
         />
       </div>
 
-      <button className="w-auto fixed top-10 right-6 flex md:hidden">
-        <FaBars className="md:hidden" ref={menuImg} onClick={toggleVisibility} />
+      <button className="w-auto fixed top-10 right-6 bg-outer-space-gray p-2 rounded-md flex lg:hidden">
+        <FaBars className="lg:hidden" ref={menuImg} onClick={toggleVisibility} />
       </button>         
              
       <div className={`
         ${
           visibilityMenuImg ? 
           "hidden" : 
-          `w-6/12 flex fixed top-20 right-2 h-screen flex-col rounded-md bg-rich-black 
+          `w-6/12 flex fixed top-20 right-2 h-screen flex-col bg-dark-unmetal
           md:static md:h-auto md:flex-row md:bg-transparent`
         }
         `} >
