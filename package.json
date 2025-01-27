@@ -5,7 +5,7 @@
   "main": ".eslintrc.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "next dev --port 2000 && json-server --watch json-server/db.json --port 3001",
+    "dev": "next dev --port 8000 && json-server --watch json-server/db.json --port 3001",
     "build": "next build",
     "start": "next start",
     "lint:fix": "npx eslint . --ext .js,.jsx,.ts,.tsx --fix",
