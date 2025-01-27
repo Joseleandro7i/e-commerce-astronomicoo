@@ -18,15 +18,24 @@ abort_with_message() {
 merge_and_push() {
   TARGET_BRANCH=$1
   echo "Merging $BRANCH_NAME into $TARGET_BRANCH..."
-  git checkout $TARGET_BRANCH
+  git checkout $TARGET_BRANCH || abort_with_message "Checkout to $TARGET_BRANCH failed. Aborting." 5
   git merge --no-ff "$BRANCH_NAME" || abort_with_message "Merge failed. Aborting." 3
   echo "Pushing $TARGET_BRANCH to remote..."
   git push "$EXPECTED_REMOTE_URL" "$TARGET_BRANCH" || abort_with_message "Push failed. Aborting." 4
-  git checkout "$BRANCH_NAME"
+  git checkout "$BRANCH_NAME" || abort_with_message "Checkout back to $BRANCH_NAME failed. Aborting." 6
 }
 
+# Ensure the script doesn't run multiple times
+if [ -f ".git/pre-push.lock" ]; then
+  echo "Pre-push script is already running. Exiting."
+  exit 0
+fi
+
+# Create a lock file to prevent multiple executions
+touch .git/pre-push.lock
+
 # Check if the current remote URL matches the expected URL
-if [ "$REMOTE_URL" == "$EXPECTED_REMOTE_URL" ]; then
+if [ "$REMOTE_URL" = "$EXPECTED_REMOTE_URL" ]; then
   echo "Remote URL matches. Proceeding with safe actions."
 
   if echo "$BRANCH_NAME" | grep -q "^feature/"; then
@@ -49,3 +58,6 @@ else
   # Remote URL does not match the expected URL
   abort_with_message "Warning: Remote URL does not match the expected repository. Aborting push." 2
 fi
+
+# Remove the lock file after the script runs
+rm -f .git/pre-push.lock
