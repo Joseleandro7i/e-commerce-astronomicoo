@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 // import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -7,6 +7,8 @@ import DropdownMenuDemo from './ui/dropdownmenu'
 import { connect } from 'react-redux'
 import { setQualEstadoUsuario, setQualNomeUsuario } from '../lib/redux/actions'
 import { permaneciaLogin } from '../../src/tempoLogin'
+import { FaBars } from 'react-icons/fa';
+
 
 const mapStateToProps = (state: any) => ({
   qualEstadoUsuario: state.qualEstadoUsuario,
@@ -37,7 +39,9 @@ function Header ({
   console.log(qualEstadoUsuario)
 
   const [temAlgoABuscar, setTemAlgoABuscar] = useState<string>('')
-  console.log(temAlgoABuscar)
+  
+  const menuImg = useRef<HTMLDivElement>(null);
+  const [visibilityMenuImg, setVisibilityMenuImg] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchPermaneciaLogin = async (): Promise<void> => {
@@ -45,11 +49,11 @@ function Header ({
 
       if (informacoesCradratrais.estadoUsuario === 'true') {
         setQualEstadoUsuario(true)
-        console.log(qualEstadoUsuario)
+        // console.log(qualEstadoUsuario)
       }
 
       setQualNomeUsuario(`${informacoesCradratrais.Nome}`)
-      console.log(qualNomeUsuario)
+      // console.log(qualNomeUsuario)
     }
 
     fetchPermaneciaLogin()
@@ -71,15 +75,37 @@ function Header ({
       iniciasNomesUsuarios = lettersArray[0] + segundaInicialNome
     } else {
       iniciasNomesUsuarios = qualNomeUsuario
-      console.log('The string does not contain a space.')
+      // console.log('The string does not contain a space.')
     }
   } else {
     console.error('qualNomeUsuario is null, undefined, or not a string')
   }
 
+  const toggleVisibility = (): void => {
+    setVisibilityMenuImg((prev) => !prev);
+};
+
+  useEffect(() => {
+    const width = window.innerWidth;
+    console.log(width)
+
+    
+    // if(width < 768) {
+    //   const currentMenuImg = menuImg.current;
+    //   console.log("Updated ref:", currentMenuImg);
+
+    //   if(visibilityMenuImg) {
+    //     setVisibilityMenuImg(true)
+    //   }
+
+    // }
+
+  })
+  
+
   return (
-    <div className="flex justify-evenly mt-2">
-      <div className="flex w-auto h-auto items-end justify-center">
+    <div className="flex justify-center mt-2 mb-3 py-4 md:justify-evenly md:m-0 md:items-center">
+      <div className="flex w-auto h-auto mr-20 items-end justify-center md:ml-0">
         <Image
           src="/img/icons8-forma-starburst-48.png"
           width={35}
@@ -92,11 +118,29 @@ function Header ({
         <input
           onChange={buscaProdutos}
           placeholder="Encontre produtos"
-          className="border-slate-600 border rounded-md bg-transparent py-2 px-3 w-auto placeholder:ml-4"
+          className="border-slate-900 border rounded-md bg-transparent py-2 px-3 w-auto placeholder:ml-4"
         />
       </div>
-      <div>
-        <ul className="flex justify-evenly">
+
+      <button className="w-auto fixed top-10 right-6 flex md:hidden">
+        <FaBars className="md:hidden" ref={menuImg} onClick={toggleVisibility} />
+      </button>         
+             
+      <div className={`
+        ${
+          visibilityMenuImg ? 
+          "hidden" : 
+          `w-6/12 flex fixed top-20 right-2 h-screen flex-col rounded-md bg-rich-black 
+          md:static md:h-auto md:flex-row md:bg-transparent`
+        }
+        `} >
+
+      <div className={`
+        ${visibilityMenuImg ? "" : "h-1/2 mt-3 mb-3" } `}>
+
+        <ul className={`
+        ${visibilityMenuImg ? "flex justify-evenly" :  "h-full flex flex-col justify-evenly md:h-auto md:flex-row" } `}>
+
           <li className="px-7 text-base cursor-pointer">
             {' '}
             <Link href="/home">Home</Link>{' '}
@@ -114,20 +158,26 @@ function Header ({
         </>
           )
         : (
-        <>
-          <Link href="/login">
-            <button className="rounded border-2 border-slate-700 px-4 py-1">
+        <div className={`
+          ${visibilityMenuImg ? "flex flex-row" : "w-full flex-col flex justify-evenly mt-10 mb-4 md:flex-row md:m-0 md:items-center" } `}>
+          <Link href="/login" className={`
+          ${visibilityMenuImg ? "w-auto" : "mx-6 w-10/12 md:w-auto md:m-0" } `}>
+            <button className="rounded w-full border-2 border-slate-700 px-4 py-1">
               Login
             </button>
           </Link>
 
-          <Link href="/signup">
-            <button className="rounded bg-slate-800 px-4 py-1">
+          <Link href="/signup" className={`
+          ${visibilityMenuImg ? "w-auto" : "mx-6 w-10/12 mt-4 md:w-auto md:m-0" } `}>
+            <button className="rounded w-full bg-slate-800 px-4 py-2">
               Criar conta
             </button>
           </Link>
-        </>
-          )}
+        </div>
+      )}
+
+      </div>
+
     </div>
   )
 }
